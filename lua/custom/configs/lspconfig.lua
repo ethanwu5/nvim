@@ -28,14 +28,14 @@ lspconfig.pyright.setup {
   settings = {
     pyright = {
       analysis = {
-        extraPaths = {"/Users/yangyang/PycharmProjects"},
+        extraPaths = {"/Users/yangyang/PycharmProjects/test_py/"},
         autoSearchPaths = true,
         diagnosticMode = "openFilesOnly",
         useLibraryCodeForTypes = true,
         autoImportCompletions = true,
         logLevel = "Trace",
 
-        stubPath = { "/Users/yangyang/PycharmProjects" },
+        -- stubPath = { "/Users/yangyang/PycharmProjects" },
       },
     },
   },
