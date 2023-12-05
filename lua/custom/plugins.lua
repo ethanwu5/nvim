@@ -16,10 +16,10 @@ local plugins = {
         end,
       },
     },
-    config = function()
-      require "plugins.configs.lspconfig"
+
+    opts = function()
       require "custom.configs.lspconfig"
-    end, -- Override to setup mason-lspconfig
+    end,
   },
 
   -- override plugin configs
@@ -49,8 +49,8 @@ local plugins = {
 
   -- To make a plugin not be loaded
   -- {
-  --   "NvChad/nvim-colorizer.lua",
-  --   enabled = false
+  --   "NvChadnvim-colorizer.lua",
+  --   enabled = false,
   -- },
 
   -- All NvChad plugins are lazy-loaded by default
