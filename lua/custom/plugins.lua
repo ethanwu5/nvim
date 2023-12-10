@@ -30,6 +30,16 @@ local plugins = {
 
   {
     "nvim-treesitter/nvim-treesitter",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter-textobjects",
+      opts = function()
+        return require "custom.configs.treesitter"
+      end,
+
+      config = function(_, opts)
+        require("nvim-treesitter.configs").setup(opts)
+      end,
+    },
     opts = overrides.treesitter,
   },
 
@@ -50,7 +60,7 @@ local plugins = {
   -- To make a plugin not be loaded
   -- {
   --   "NvChadnvim-colorizer.lua",
-  --   enabled = false,
+  --   enabled = true,
   -- },
 
   -- All NvChad plugins are lazy-loaded by default
@@ -114,49 +124,31 @@ local plugins = {
       vim.fn["mkdp#util#install"]()
     end,
   },
-  {
-    "yamatsum/nvim-cursorline",
-    config = function()
-      print "cursorline..."
-      require("nvim-cursorline").setup {
-        cursorline = {
-          enable = true,
-          timeout = 1000,
-          number = false,
-        },
-        cursorword = {
-          enable = true,
-          min_length = 3,
-          hl = { underline = true },
-        },
-      }
-    end,
-  },
-  {
-    "brenoprata10/nvim-highlight-colors",
-    config = function()
-      require("nvim-highlight-colors").setup {
-        render = "background", -- or 'foreground' or 'first_column'
-        enable_named_colors = true,
-        enable_tailwind = false,
-        custom_colors = {
-          -- label property will be used as a pattern initially(string.gmatch), therefore you need to escape the special characters by yourself with %
-          { label = "%-%-theme%-font%-color", color = "#fff" },
-          { label = "%-%-theme%-background%-color", color = "red" },
-          { label = "%-%-theme%-primary%-color", color = "#0f1219" },
-          { label = "%-%-theme%-secondary%-color", color = "#5a5d64" },
-          { label = "%-%-theme%-contrast%-color", color = "#fff" },
-          { label = "%-%-theme%-accent%-color", color = "#55678e" },
-        },
-      }
-    end,
-  },
+  -- {
+  --   "brenoprata10/nvim-highlight-colors",
+  --   config = function()
+  --     require("nvim-highlight-colors").setup {
+  --       render = "background", -- or 'foreground' or 'first_column'
+  --       enable_named_colors = true,
+  --       enable_tailwind = false,
+  --       custom_colors = {
+  --         -- label property will be used as a pattern initially(string.gmatch), therefore you need to escape the special characters by yourself with %
+  --         { label = "%-%-theme%-font%-color", color = "#fff" },
+  --         { label = "%-%-theme%-background%-color", color = "red" },
+  --         { label = "%-%-theme%-primary%-color", color = "#0f1219" },
+  --         { label = "%-%-theme%-secondary%-color", color = "#5a5d64" },
+  --         { label = "%-%-theme%-contrast%-color", color = "#fff" },
+  --         { label = "%-%-theme%-accent%-color", color = "#55678e" },
+  --       },
+  --     }
+  --   end,
+  -- },
 
   {
     "stevearc/aerial.nvim",
     opts = {},
 
-    ft = { "python", "go" },
+    ft = { "python", "go", "lua" },
     -- Optional dependencies
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
@@ -172,25 +164,42 @@ local plugins = {
         end,
       }
       -- You probably also want to set a keymap to toggle aerial
-      vim.keymap.set("n", "<leader>a", "<cmd>AerialToggle!<CR>")
+      vim.keymap.set("n", "<leader>ol", "<cmd>AerialToggle!<CR>")
     end,
   },
   {
     "nvim-telescope/telescope.nvim",
+    lazy = false,
+    opts = function()
+      require("project_nvim").setup {}
+      require("telescope").load_extension "cmdline"
+      -- require("projects.nvim").setup {}
+      require("telescope").load_extension "projects"
+
+      require("telescope").load_extension "persisted"
+      -- require("telescope").extensions.projects.projects {}
+    end,
     dependencies = {
       "ahmedkhalf/project.nvim",
-      lazy = false,
-      config = function()
-        require("project_nvim").setup {}
-      end,
+      "jonarrien/telescope-cmdline.nvim",
+      -- Lua
+      {
+        "olimorris/persisted.nvim",
+        config = function()
+          require("persisted").setup {
+            autoload = false,
+          }
+        end,
+      },
     },
-    opts = {
-      -- extensions_list = { "projects" },
+    keys = {
+      { "<leader><leader>", "<cmd>Telescope cmdline<cr>", desc = "Cmdline" },
+      { "<leader>pl", "<cmd>Telescope projects<cr>", desc = "list recent projects" },
     },
   },
+
   {
-    "nvim-treesitter/nvim-treesitter-textobjects",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    "ThePrimeagen/vim-be-good",
   },
 }
 
